@@ -50,10 +50,13 @@ public class PersonState implements State {
                     // Sort it so we can check if it already has that permutation
                     Collections.sort(temp);
 
-                    if (!pass.contains(temp)) pass.add(temp);
+                    if (!pass.contains(temp)) {
+                        pass.add(temp);
+                    }
                 }
             }
 
+            // Turn those crossing combinations into actions
             for (int i = 0; i != pass.size(); i++) {
                 PersonAction pAction = new PersonAction(pass.get(i), isTorchWest);
                 successors.add(new ActionStatePair(pAction, getSuccessor(pass.get(i))));
@@ -94,7 +97,7 @@ public class PersonState implements State {
     }
 
     /**
-     * @return
+     * @return The state in string format
      */
     @Override
     public String toString() {
@@ -112,20 +115,20 @@ public class PersonState implements State {
         }
 
         // List everyone on east side
-        str = listPeopleWest.stream().map((p) -> "Name: " + p.getName() + "(" + p.getTimeToCross() + ")")
+        str = listPeopleWest.stream().map((p) -> p.getName() + "(" + p.getTimeToCross() + ") ")
                 .reduce(str, String::concat);
 
         // Add torch if it is east
-        if (isTorchWest) str += " torch";
+        if (isTorchWest) str += "torch";
 
         // Show bridge position with capacity
-        str += " [---(" + bridge.getMaxCapacity() + ")---]";
+        str += " [---(" + bridge.getMaxCapacity() + ")---] ";
 
-        str = listPeopleEast.stream().map((p) -> "Name: " + p.getName() + "(" + p.getTimeToCross() + ")")
+        str = listPeopleEast.stream().map((p) -> p.getName() + "(" + p.getTimeToCross() + ") ")
                 .reduce(str, String::concat);
 
         if (!isTorchWest) {
-            str += " torch\n\n";
+            str += "torch\n\n";
         } else {
             str += "\n\n";
         }
@@ -135,8 +138,8 @@ public class PersonState implements State {
 
 
     /**
-     * @param paramObject
-     * @return
+     * @param paramObject to compare
+     * @return if the two objects are the same
      */
     @Override
     public boolean equals(Object paramObject) {
@@ -153,7 +156,7 @@ public class PersonState implements State {
     }
 
     /**
-     * @return
+     * @return hash of the torch's position
      */
     @Override
     public int hashCode() {
@@ -166,14 +169,12 @@ public class PersonState implements State {
         return listPeopleWest.isEmpty();
     }
 
+    // Torch position
     public boolean isTorchWest() {
         return isTorchWest;
     }
 
-    public Bridge getBridge() {
-        return bridge;
-    }
-
+    // Boolean for toString method to show goal and initial states
     public void setShowGoalState(boolean showGoalState) {
         this.showGoalState = showGoalState;
     }
@@ -182,7 +183,11 @@ public class PersonState implements State {
         this.showInitialState = showInitialState;
     }
 
+    // Check if the torch position is valid
     private boolean isInvalid() {
+        if (isTorchWest && listPeopleWest.size() == 0) return true;
+        if (!isTorchWest && listPeopleEast.size() == 0) return true;
+
         return false;
     }
 }

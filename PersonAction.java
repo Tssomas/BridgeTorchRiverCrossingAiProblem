@@ -13,8 +13,8 @@ public class PersonAction extends Action {
     boolean torchIsWest;
 
     /**
-     * @param person
-     * @param torchIsWest
+     * @param person List of people to apply the action to
+     * @param torchIsWest which side the torch is on
      */
     public PersonAction(ArrayList<Person> person, boolean torchIsWest) {
         this.person = person;
@@ -22,14 +22,14 @@ public class PersonAction extends Action {
     }
 
     /**
-     * @return
+     * @return the person object
      */
     public ArrayList<Person> getPerson() {
         return person;
     }
 
     /**
-     * @return
+     * @return The action in string format
      */
     @Override
     public String toString() {
@@ -38,10 +38,8 @@ public class PersonAction extends Action {
         }
         String str = "ACTION:  Moving ";
 
-        str = this.getPerson().stream().map((p) -> "Name: " + p.getName() + "(" + p.getTimeToCross() + ")")
+        str = this.getPerson().stream().map((p) -> p.getName() + "(" + p.getTimeToCross() + ") ")
                 .reduce(str, String::concat);
-
-        //str = this.getPerson().stream().map((p) -> p.getName()+"("+p.getWeight()+")["+p.isCanDrive()+"] - ").reduce(str, String::concat);
 
         if (this.torchIsWest) {
             str += "WEST TO EAST\n";

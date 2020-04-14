@@ -14,39 +14,56 @@ public class RunBridgeTorchProblem {
 
     private Scanner reader;
 
-    private final ArrayList<Person> listPeople = new ArrayList<>();
+    private final ArrayList<Person> westStartPeople = new ArrayList<>();
+    private final ArrayList<Person> eastStartPeople = new ArrayList<>();
+    private final ArrayList<Person> goalList = new ArrayList<>();
+
     private Bridge bridge;
+
+    private boolean torchStartPos;
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        /*RunBridgeTorchProblem mBridgeTorchProb = new RunBridgeTorchProblem();
-        
+
+        // Un-comment START
+        RunBridgeTorchProblem mBridgeTorchProb = new RunBridgeTorchProblem();
+
         mBridgeTorchProb.initBridge();
         mBridgeTorchProb.initPeople();
-        
-        mBridgeTorchProb.start();*/
 
-        ArrayList<Person> listPersons = new ArrayList<>();
-        listPersons.add(new Person("Ben", 2, true));
-        listPersons.add(new Person("Claire", 5, true));
-        listPersons.add(new Person("Adam", 1, false));
-        //listPersons.add(new Person("Doris", 8, true));
+        mBridgeTorchProb.start();
+        //Un-comment END */
+
+        // ============== Un-comment above and comment below to try a custom problem
+        // Below is the standard problem
+
+        // Comment START =====
+        /*ArrayList<Person> startList = new ArrayList<>();
+        Person Ben = new Person("Ben", 2);
+        Person Claire = new Person("Claire", 5);
+        Person Adam = new Person("Adam", 1);
+        Person Doris = new Person("Doris", 8);
+
+        startList.add(Ben);
+        startList.add(Claire);
+        startList.add(Adam);
+        startList.add(Doris);
 
         // A bridge have at least 2 places
         Bridge bridge = new Bridge(2);
 
-        // Sort list
-        Collections.sort(listPersons);
+        // Sort the list
+        Collections.sort(startList);
 
         // Initial state with everyone on the west side and empty on east side, with torch on west side
-        PersonState start = new PersonState(listPersons, new ArrayList<>(), true, bridge);
+        PersonState start = new PersonState(startList, new ArrayList<>(), true, bridge);
         start.setShowInitialState(true);
         System.out.print(start.toString());
 
         // Opposite of initial state
-        PersonState goal = new PersonState(new ArrayList<>(), listPersons, false, bridge);
+        PersonState goal = new PersonState(new ArrayList<>(), startList, false, bridge);
         goal.setShowGoalState(true);
         System.out.print(goal.toString());
 
@@ -61,7 +78,8 @@ public class RunBridgeTorchProblem {
             System.out.println("No solution");
         } else {
             System.out.println("Nodes visited: " + astar.nodeVisited + ", Cost: " + Cost.cost);
-        }
+        }*/
+        // Comment END =====
     }
 
     private void initBridge() {
@@ -69,6 +87,7 @@ public class RunBridgeTorchProblem {
 
         System.out.println("Configure the bridge.");
         System.out.print("\nMax capacity of the bridge: ");
+        System.out.print("(MINIMUM = 2 | MAXIMUM = 4)");
 
         int maxBridgeCapacity = reader.nextInt();
         bridge = new Bridge(maxBridgeCapacity);
@@ -77,7 +96,16 @@ public class RunBridgeTorchProblem {
     private void initPeople() {
         reader = new Scanner(System.in);
 
-        System.out.print("\nHow many people are crossing the bridge: ");
+        System.out.print("\nIs the torch starting on the West side?: ");
+        System.out.print("(Enter 'true' or 'false')");
+        System.out.print("(default = true)");
+        try {
+            torchStartPos = reader.nextBoolean();
+        } catch (InputMismatchException e) {
+            torchStartPos = true;
+        }
+
+        System.out.print("\nHow many people are involved?: ");
         int nPeople = reader.nextInt();
 
         for (int i = 1; i < nPeople + 1; i++) {
@@ -98,24 +126,42 @@ public class RunBridgeTorchProblem {
                 System.out.print("(Enter 'true' or 'false')");
                 System.out.print("(default = true)");
                 startOnWest = reader.nextBoolean();
+                System.out.print(" GAY: " + startOnWest);
             } catch (InputMismatchException e) {
                 // Something unexpected happened... Set start on west side as default
                 startOnWest = true;
                 reader.next();
             }
 
-            Person person = new Person(personName, crossingTime, startOnWest);
-            listPeople.add(person);
+            Person person = new Person(personName, crossingTime);
+            // Add the person to their set side
+            if (startOnWest) {
+                westStartPeople.add(person);
+            } else {
+                System.out.print(" gay2 "+person.getName());
+                eastStartPeople.add(person);
+            }
+
+            // Add it to the goal state ArrayList
+            goalList.add(person);
         }
     }
 
     private void start() {
-        Collections.sort(listPeople);
+        Collections.sort(westStartPeople);
+        Collections.sort(eastStartPeople);
+        Collections.sort(goalList);
 
-        PersonState start = new PersonState(listPeople, new ArrayList<>(), true, bridge);
-        PersonState goal = new PersonState(new ArrayList<>(), listPeople, false, bridge);
+        PersonState initialState = new PersonState(westStartPeople, eastStartPeople, torchStartPos, bridge);
+        PersonState goalState = new PersonState(new ArrayList<>(), goalList, false, bridge);
 
-        AStar astar = new AStar(start, goal);
+        // Print initial and goal states
+        initialState.setShowInitialState(true);
+        System.out.print(initialState.toString());
+        goalState.setShowGoalState(true);
+        System.out.print(goalState.toString());
+
+        AStar astar = new AStar(initialState, goalState);
 
         Path path = astar.search();
 
