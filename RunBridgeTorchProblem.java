@@ -27,7 +27,7 @@ public class RunBridgeTorchProblem {
      */
     public static void main(String[] args) {
 
-        // Un-comment START
+        /*/ Un-comment START
         RunBridgeTorchProblem mBridgeTorchProb = new RunBridgeTorchProblem();
 
         mBridgeTorchProb.initBridge();
@@ -40,7 +40,7 @@ public class RunBridgeTorchProblem {
         // Below is the standard problem
 
         // Comment START =====
-        /*ArrayList<Person> startList = new ArrayList<>();
+        ArrayList<Person> startList = new ArrayList<>();
         Person Ben = new Person("Ben", 2);
         Person Claire = new Person("Claire", 5);
         Person Adam = new Person("Adam", 1);
@@ -78,27 +78,31 @@ public class RunBridgeTorchProblem {
             System.out.println("No solution");
         } else {
             System.out.println("Nodes visited: " + astar.nodeVisited + ", Cost: " + Cost.cost);
-        }*/
+        }
         // Comment END =====
     }
 
     private void initBridge() {
         reader = new Scanner(System.in);
 
-        System.out.println("Configure the bridge.");
-        System.out.print("\nMax capacity of the bridge: ");
+        System.out.println("Configure the bridge.\n");
+        System.out.print("Max capacity of the bridge:\n");
         System.out.print("(MINIMUM = 2 | MAXIMUM = 4)");
 
         int maxBridgeCapacity = reader.nextInt();
         bridge = new Bridge(maxBridgeCapacity);
+
+        if (maxBridgeCapacity < 2 || maxBridgeCapacity > 4) {
+            System.out.print(" ===== INVALID CAPACITY ===== (" + maxBridgeCapacity + ") ======\n");
+        }
     }
 
     private void initPeople() {
         reader = new Scanner(System.in);
 
-        System.out.print("\nIs the torch starting on the West side?: ");
-        System.out.print("(Enter 'true' or 'false')");
-        System.out.print("(default = true)");
+        System.out.print("\nIs the torch starting on the West side?:\n");
+        System.out.print("(Enter 'true' or 'false')\n");
+        System.out.print("(default = true)\n");
         try {
             torchStartPos = reader.nextBoolean();
         } catch (InputMismatchException e) {
@@ -122,11 +126,10 @@ public class RunBridgeTorchProblem {
             crossingTime = reader.nextInt();
 
             try {
-                System.out.print("Start on the west side of the bridge: ");
-                System.out.print("(Enter 'true' or 'false')");
-                System.out.print("(default = true)");
+                System.out.print("Start on the west side of the bridge:\n");
+                System.out.print("(Enter 'true' or 'false')\n");
+                System.out.print("(default = true)\n");
                 startOnWest = reader.nextBoolean();
-                System.out.print(" GAY: " + startOnWest);
             } catch (InputMismatchException e) {
                 // Something unexpected happened... Set start on west side as default
                 startOnWest = true;
@@ -138,7 +141,6 @@ public class RunBridgeTorchProblem {
             if (startOnWest) {
                 westStartPeople.add(person);
             } else {
-                System.out.print(" gay2 "+person.getName());
                 eastStartPeople.add(person);
             }
 

@@ -41,20 +41,63 @@ public class PersonState implements State {
             // Work out every possible combination of people crossing
             ArrayList<ArrayList<Person>> pass = new ArrayList<>();
 
-            for (int i = 0; i != peopleList.size(); i++) {
+            // Only did it this way because i was struggling to get all the combinations of people for capacity > 2.. not pretty
+            for (Person person0 : peopleList) {
+                for (Person person1 : peopleList) {
+                    if (bridge.getMaxCapacity() == 2) {
+                        ArrayList<Person> temp = new ArrayList<>();
+                        temp.add(person0);
+                        if (!temp.contains(person1))
+                            temp.add(person1);
+
+                        Collections.sort(temp);
+                        if (!pass.contains(temp)) pass.add(temp);
+                    } else {
+                        for (Person person2 : peopleList) {
+                            if (bridge.getMaxCapacity() == 3) {
+                                ArrayList<Person> temp = new ArrayList<>();
+                                temp.add(person0);
+                                if (!temp.contains(person1))
+                                    temp.add(person1);
+                                if (!temp.contains(person2))
+                                    temp.add(person2);
+
+                                Collections.sort(temp);
+                                if (!pass.contains(temp)) pass.add(temp);
+                            } else {
+                                for (Person person3 : peopleList) {
+                                    ArrayList<Person> temp = new ArrayList<>();
+                                    temp.add(person0);
+                                    if (!temp.contains(person1))
+                                        temp.add(person1);
+                                    if (!temp.contains(person2))
+                                        temp.add(person2);
+                                    if (!temp.contains(person3))
+                                        temp.add(person3);
+
+                                    Collections.sort(temp);
+                                    if (!pass.contains(temp)) pass.add(temp);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            /*for (int i = 0; i != peopleList.size(); i++) {
                 for (int e = 0; e != peopleList.size(); e++) {
                     ArrayList<Person> temp = new ArrayList<>();
                     temp.add(peopleList.get(i));
                     if (!temp.contains(peopleList.get(e))) temp.add(peopleList.get(e));
 
-                    // Sort it so we can check if it already has that permutation
+                    // Sort it so we can check if it already has that combination
                     Collections.sort(temp);
 
                     if (!pass.contains(temp)) {
                         pass.add(temp);
                     }
                 }
-            }
+            }*/
 
             // Turn those crossing combinations into actions
             for (int i = 0; i != pass.size(); i++) {
