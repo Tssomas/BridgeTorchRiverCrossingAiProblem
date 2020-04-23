@@ -1,4 +1,4 @@
-package rivercrossing;
+package com.thomas_sutherland_1805815.bridgetorchprob;
 
 import cm3038.search.Path;
 

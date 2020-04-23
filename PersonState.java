@@ -1,9 +1,12 @@
-package rivercrossing;
+package com.thomas_sutherland_1805815.bridgetorchprob;
 
 import cm3038.search.ActionStatePair;
 import cm3038.search.State;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * @author Thomas Sutherland 1805815

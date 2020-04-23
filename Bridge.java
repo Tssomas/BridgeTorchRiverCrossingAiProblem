@@ -1,4 +1,4 @@
-package rivercrossing;
+package com.thomas_sutherland_1805815.bridgetorchprob;
 
 /**
  * @author Thomas Sutherland 1805815

@@ -1,4 +1,4 @@
-package rivercrossing;
+package com.thomas_sutherland_1805815.bridgetorchprob;
 
 /**
  * Public static object to retain cost/time taken to solve the problem
